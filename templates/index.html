@@ -1,44 +1,54 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>To-Do List</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Lista de Tarefas</title>
+    <!-- Fonte Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <!-- Arquivo CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>Minha To-Do List</h1>
+    <!-- Cabeçalho -->
+    <header>
+        <h1>Minhas Tarefas</h1>
+    </header>
 
-        <!-- Bloco para mensagens flash -->
+    <!-- Mensagens flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
         <ul class="flashes">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <li class="flash-message {{ category }}">{{ message }}</li>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+          {% endfor %}
         </ul>
+      {% endif %}
+    {% endwith %}
 
-        <!-- Formulário para adicionar tarefas -->
-        <form action="/add" method="POST">
-            <input type="text" name="content" placeholder="Nova tarefa" required>
+    <!-- Conteúdo principal -->
+    <div class="container">
+        <!-- Formulário para adicionar nova tarefa -->
+        <form action="{{ url_for('add') }}" method="post" id="add-form">
+            <input type="text" name="content" placeholder="Digite uma nova tarefa" required>
             <button type="submit">Adicionar</button>
         </form>
 
         <!-- Lista de tarefas -->
-        <ul>
-            {% for todo in todos %}
-                <li>
-                    <div class="todo-item">
-                        <input type="checkbox" data-id="{{ todo.id }}" {% if todo.completed %}checked{% endif %}>
-                        <span {% if todo.completed %}style="text-decoration: line-through;"{% endif %}>{{ todo.content }}</span>
-                        <a href="/delete/{{ todo.id }}">Excluir</a>
-                    </div>
-                </li>
-            {% endfor %}
+        <ul id="todo-list">
+        {% for todo in todos %}
+            <li data-id="{{ todo.id }}">
+                <label class="checkbox-container">
+                    <input type="checkbox" class="complete-checkbox" {% if todo.completed %} checked {% endif %}>
+                    <span class="checkmark"></span>
+                </label>
+                <span class="todo-content {% if todo.completed %}completed{% endif %}">{{ todo.content }}</span>
+                <button class="delete-button">×</button>
+            </li>
+        {% endfor %}
         </ul>
     </div>
-    <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+
+    <!-- Arquivo JavaScript -->
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
 </body>
 </html>

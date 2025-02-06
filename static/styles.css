@@ -1,0 +1,210 @@
+/* Definição das cores */
+:root {
+    --primary-color: #2C3E50;       /* Azul Escuro */
+    --secondary-color: #1ABC9C;     /* Turquesa */
+    --accent-color: #E74C3C;        /* Vermelho */
+    --background-color: #ECF0F1;    /* Cinza Claro */
+    --text-color: #2C3E50;          /* Azul Escuro */
+    --completed-color: #95A5A6;     /* Cinza Médio */
+}
+
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos base */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+header {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+h1 {
+    margin: 0;
+    font-weight: normal;
+}
+
+.container {
+    width: 90%;
+    max-width: 600px;
+    margin: 30px auto;
+}
+
+/* Formulário */
+#add-form {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+#add-form input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid var(--primary-color);
+    border-radius: 4px 0 0 4px;
+    font-size: 16px;
+}
+
+#add-form button {
+    padding: 0 20px;
+    background-color: var(--secondary-color);
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 0 4px 4px 0;
+    transition: background-color 0.3s;
+}
+
+#add-form button:hover {
+    background-color: #16a085;
+}
+
+/* Lista de tarefas */
+#todo-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#todo-list li {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    padding: 15px 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+#todo-list li:hover {
+    background-color: #f0f0f0;
+}
+
+/* Checkbox personalizado */
+.checkbox-container {
+    display: inline-block;
+    position: relative;
+    padding-left: 25px;
+    margin-right: 10px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.checkbox-container .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 18px;
+    width: 18px;
+    background-color: #fff;
+    border: 2px solid var(--primary-color);
+    border-radius: 4px;
+}
+
+.checkbox-container input:checked ~ .checkmark {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.checkbox-container .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.checkbox-container .checkmark:after {
+    left: 5px;
+    top: 0px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.todo-content {
+    flex: 1;
+    font-size: 16px;
+    word-break: break-word;
+}
+
+.completed {
+    text-decoration: line-through;
+    color: var(--completed-color);
+}
+
+.delete-button {
+    background-color: transparent;
+    border: none;
+    color: var(--accent-color);
+    font-size: 20px;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: color 0.3s;
+}
+
+.delete-button:hover {
+    color: #c0392b;
+}
+
+/* Mensagens flash */
+.flashes {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 auto 20px auto;
+    width: 90%;
+    max-width: 600px;
+}
+
+.flashes li {
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Responsividade */
+@media (max-width: 500px) {
+    #add-form {
+        flex-direction: column;
+    }
+
+    #add-form input[type="text"] {
+        border-radius: 4px 4px 0 0;
+    }
+
+    #add-form button {
+        border-radius: 0 0 4px 4px;
+        width: 100%;
+        margin-top: 5px;
+    }
+}

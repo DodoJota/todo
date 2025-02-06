@@ -1,7 +1,5 @@
 from flask import Flask, render_template, flash, redirect, url_for, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-import os
-
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo.db'
@@ -15,20 +13,23 @@ class Todo(db.Model):
     content = db.Column(db.String(200), nullable=False)
     completed = db.Column(db.Boolean, default=False)
 
+with app.app_context():
+    db.create_all()
+
 @app.route('/')
 def index():
     todos = Todo.query.all()
-    return render_template(index.html, todos=todos)
+    return render_template('index.html', todos=todos)
 
 @app.route('/add', methods=['POST'])
 def add():
-    content = request.form('content')
+    content = request.form['content']
     new_todo = Todo(content=content)
 
     try:
         db.session.add(new_todo)
         db.session.commit()
-        flash('Tarefa adicionada!','success')
+        flash('Tarefa adicionada!', 'success')
         return redirect(url_for('index'))
     except:
         flash('Erro ao adicionar tarefa!', 'error')
@@ -43,19 +44,20 @@ def complete(id):
     try:
         db.session.commit()
         message = 'Parabéns por concluir a tarefa!' if todo.completed else 'Tarefa desmarcada como não concluída.'
-        return jsonify({'status': 'success', 'message': message})
+        return jsonify({'status': 'success', 'message': message, 'category': 'success'})
     except:
-         return jsonify({'status': 'error'}), 500
+        return jsonify({'status': 'error', 'message': 'Erro ao atualizar tarefa.', 'category': 'error'}), 500
 
 @app.route('/delete/<int:id>', methods=['POST'])
-def delete():
+def delete(id):
     todo = Todo.query.get_or_404(id)
 
     try:
         db.session.delete(todo)
         db.session.commit()
-        flash('Tarefa excluída!', 'success')
-        return redirect(url_for('index'))
+        return jsonify({'status': 'success', 'message': 'Tarefa excluída!', 'category': 'success'})
     except:
-        flash('Erro ao excluir tarefa', 'error')
-        return redirect(url_for('index'))
+        return jsonify({'status': 'error', 'message': 'Erro ao excluir tarefa.', 'category': 'error'}), 500
+
+if __name__ == '__main__':
+    app.run(debug=True)
