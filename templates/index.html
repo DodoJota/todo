@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Minha To-Do List</h1>
+
+        <!-- Bloco para mensagens flash -->
+        <ul class="flashes">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <li class="flash-message {{ category }}">{{ message }}</li>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </ul>
+
+        <!-- Formulário para adicionar tarefas -->
+        <form action="/add" method="POST">
+            <input type="text" name="content" placeholder="Nova tarefa" required>
+            <button type="submit">Adicionar</button>
+        </form>
+
+        <!-- Lista de tarefas -->
+        <ul>
+            {% for todo in todos %}
+                <li>
+                    <div class="todo-item">
+                        <input type="checkbox" data-id="{{ todo.id }}" {% if todo.completed %}checked{% endif %}>
+                        <span {% if todo.completed %}style="text-decoration: line-through;"{% endif %}>{{ todo.content }}</span>
+                        <a href="/delete/{{ todo.id }}">Excluir</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+</body>
+</html>
