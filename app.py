@@ -2,6 +2,7 @@ from flask import Flask, render_template, flash, redirect, url_for, request, jso
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user, UserMixin
 from werkzeug.security import check_password_hash
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo.db'
@@ -9,6 +10,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'password'
 
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -26,6 +28,16 @@ class Todo(db.Model):
 
     # Relacionamento com o usuário
     user = db.relationship('User', backref=db.backref('todos', lazy=True))
+    # Relacionamento com a lista
+    task_list = db.relationship('TaskList', backref=db.backref('todos', lazy=True))
+
+class TaskList(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    # Relacionamento com o usuário
+    user = db.relationship('User', backref=db.backref('task_lists', lazy=True))
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
