@@ -23,10 +23,37 @@ body {
 }
 
 header {
-    background-color: var(--primary-color);
+    background-color: #2C3E50;
     color: #fff;
-    padding: 20px 0;
-    text-align: center;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+}
+
+.logout-button {
+    color: #fff;
+    background-color: transparent;
+    padding: 10px 15px;
+    text-decoration: none;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.logout-button:hover {
+    background-color: #fff;
+    color: #2C3E50;
 }
 
 h1 {
