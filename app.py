@@ -22,6 +22,10 @@ class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(200), nullable=False)
     completed = db.Column(db.Boolean, default=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    # Relacionamento com o usuário
+    user = db.relationship('User', backref=db.backref('todos', lazy=True))
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -34,13 +38,13 @@ with app.app_context():
 @app.route('/')
 @login_required
 def index():
-    todos = Todo.query.all()
+    todos = Todo.query.filter_by(user_id=current_user.id).all()
     return render_template('index.html', todos=todos)
 
 @app.route('/add', methods=['POST'])
 def add():
     content = request.form['content']
-    new_todo = Todo(content=content)
+    new_todo = Todo(content=content, user_id=current_user.id)
 
     try:
         db.session.add(new_todo)
@@ -84,7 +88,6 @@ def login():
 
         if user and check_password_hash(user.password, password):
             login_user(user)
-            #flash('Login successful!', 'success')
             return redirect(url_for('index'))
         else:
             flash('Invalid username or password', 'error')
