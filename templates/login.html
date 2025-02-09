@@ -2,26 +2,39 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Login - Lista de Tarefas</title>
+    <!-- Fonte Google -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <!-- Arquivo CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+    <!-- Cabeçalho -->
+    <header>
+        <h1>Bem-vindo ao To-Do List</h1>
+    </header>
+
+    <!-- Mensagens flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flashes">
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <!-- Conteúdo principal -->
     <div class="container">
-        <h2>Login</h2>
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            <ul class="flashes">
-              {% for category, message in messages %}
-                <li class="{{ category }}">{{ message }}</li>
-              {% endfor %}
-            </ul>
-          {% endif %}
-        {% endwith %}
-        <form method="POST">
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <button type="submit">Login</button>
+        <!-- Formulário de Login -->
+        <form action="{{ url_for('login') }}" method="post" id="login-form">
+            <h2>Faça login na sua conta</h2>
+            <label for="email">E-mail:</label>
+            <input type="text" name="email" id="email" placeholder="Digite seu e-mail" required>
+            <label for="password">Senha:</label>
+            <input type="password" name="password" id="password" placeholder="Digite sua senha" required>
+            <button type="submit">Entrar</button>
         </form>
     </div>
 </body>

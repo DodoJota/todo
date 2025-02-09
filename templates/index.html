@@ -12,6 +12,9 @@
     <!-- Cabeçalho -->
     <header>
         <h1>Minhas Tarefas</h1>
+        <div class="user-info">
+            <p>Bem-vindo, {{ email }}! <a href="{{ url_for('logout') }}">Logout</a></p>
+        </div>
     </header>
 
     <!-- Mensagens flash -->

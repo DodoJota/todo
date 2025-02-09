@@ -8,3 +8,4 @@ __pycache__/
 *.log
 instance/
 criar_usuario.py
+beta_app.py

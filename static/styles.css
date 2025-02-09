@@ -192,6 +192,54 @@ h1 {
     color: #721c24;
 }
 
+.user-info {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 16px;
+}
+
+.user-info a {
+    margin-left: 10px;
+    text-decoration: none;
+    color: #007BFF;
+}
+
+.user-info a:hover {
+    text-decoration: underline;
+}
+
+/* Estilo para o formulário de login */
+#login-form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+#login-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#login-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+#login-form input[type="text"],
+#login-form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+#login-form button {
+    width: 100%;
+    padding: 10px;
+}
+
 /* Responsividade */
 @media (max-width: 500px) {
     #add-form {
