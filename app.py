@@ -130,3 +130,7 @@ def delete(id):
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+
+# PROXIMOS PASSOS: 1- CRIAR LOGS | 2- MAIS LISTAS POR USUÁRIO | 3- UMA LISTA POR DIA (ENVOLVER CALENDÁRIO)
