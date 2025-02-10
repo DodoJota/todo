@@ -1,11 +1,20 @@
 from flask import Flask, render_template, flash, redirect, url_for, request, jsonify, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+import logging
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'password'
+
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s - %(levelname)s - %(message)s',
+                    handlers=[
+                        logging.FileHandler("logs/app.log"),
+                        logging.StreamHandler()
+                    ]
+                    )
 
 db = SQLAlchemy(app)
 
@@ -42,6 +51,7 @@ with app.app_context():
 
 @app.route('/')
 def index():
+    logging.debug('Accessing index route')
     if 'user_id' not in session:
         return redirect(url_for('login'))
     user = User.query.get(session['user_id'])
@@ -50,6 +60,7 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    logging.debug('Accessing login route')
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
@@ -59,20 +70,24 @@ def login():
         if user and user.check_password(password):
             session['user_id'] = user.id
             flash('Login realizado com sucesso!', 'success')
+            logging.info(f'User {email} successfully logged in')
             return redirect(url_for('index'))
         else:
             flash('E-mail ou senha inválidos.', 'error')
+            logging.info(f'Login attempt failed for user {email}')
             return redirect(url_for('login'))
     return render_template('login.html')
 
 @app.route('/logout')
 def logout():
+    logging.debug('Accessing logout route')
     session.pop('user_id', None)
     flash('Você saiu da sua conta.', 'info')
     return redirect(url_for('login'))
 
 @app.route('/add', methods=['POST'])
 def add():
+    logging.debug('Accessing add route')
     if 'user_id' not in session:
         flash('Por favor, faça login para adicionar tarefas.', 'error')
         return redirect(url_for('login'))
@@ -88,18 +103,23 @@ def add():
         db.session.add(new_todo)
         db.session.commit()
         flash('Tarefa adicionada!', 'success')
+        logging.info(f"Task added by user {session['user_id']}")
         return redirect(url_for('index'))
-    except:
+    except Exception as e:
+        db.session.rollback()
         flash('Erro ao adicionar tarefa!', 'error')
+        logging.error(f'Error adding task: {e}')
         return redirect(url_for('index'))
 
 @app.route('/complete/<int:id>', methods=['POST'])
 def complete(id):
+    logging.debug('Acessing complete route')
     if 'user_id' not in session:
         return jsonify({'status': 'error', 'message': 'Por favor, faça login para completar tarefas.', 'category': 'error'}), 401  # 401 Unauthorized
 
     todo = Todo.query.get_or_404(id)
     if todo.user_id != session['user_id']:
+        logging.warning(f'Unauthorized attempt to complete task by user {session["user_id"]} in task {id}')
         return jsonify({'status': 'error', 'message': 'Você não tem permissão para alterar esta tarefa.', 'category': 'error'}), 403  # 403 Forbidden
 
     data = request.get_json()
@@ -108,12 +128,15 @@ def complete(id):
     try:
         db.session.commit()
         message = 'Parabéns por concluir a tarefa!' if todo.completed else 'Tarefa desmarcada como não concluída.'
+        logging.info(f'Task {id} status changed to {"complete" if todo.completed else "incomplete"} by user {session["user_id"]}')
         return jsonify({'status': 'success', 'message': message, 'category': 'success'})
-    except:
+    except Exception as e:
+        logging.error(f'Error completing task: {e}')
         return jsonify({'status': 'error', 'message': 'Erro ao atualizar tarefa.', 'category': 'error'}), 500  # 500 Internal Server Error
 
 @app.route('/delete/<int:id>', methods=['POST'])
 def delete(id):
+    logging.debug('Acessing delete route')
     if 'user_id' not in session:
         return jsonify({'status': 'error', 'message': 'Por favor, faça login para excluir tarefas.', 'category': 'error'}), 401  # 401 Unauthorized
 
@@ -124,8 +147,11 @@ def delete(id):
     try:
         db.session.delete(todo)
         db.session.commit()
+        logging.info(f'Task {id} deleted by user {session["user_id"]}')
         return jsonify({'status': 'success', 'message': 'Tarefa excluída!', 'category': 'success'})
-    except:
+    except Exception as e:
+        db.session.rollback()
+        logging.error(f'Error deleting task: {e}')
         return jsonify({'status': 'error', 'message': 'Erro ao excluir tarefa.', 'category': 'error'}), 500  # 500 Internal Server Error
 
 if __name__ == '__main__':
