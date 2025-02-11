@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Login - Lista de Tarefas</title>
+    <title>Registrar - Lista de Tarefas</title>
     <!-- Fonte Google -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <!-- Arquivo CSS -->
@@ -11,7 +11,7 @@
 <body>
     <!-- Cabeçalho -->
     <header>
-        <h1>Bem-vindo ao To-Do List</h1>
+        <h1>Crie sua conta no To-Do List</h1>
     </header>
 
     <!-- Mensagens flash -->
@@ -27,15 +27,17 @@
 
     <!-- Conteúdo principal -->
     <div class="container">
-        <!-- Formulário de Login -->
-        <form action="{{ url_for('login') }}" method="post" id="login-form">
-            <h2>Faça login na sua conta</h2>
+        <!-- Formulário de Registro -->
+        <form action="{{ url_for('register') }}" method="post" id="register-form" class="center-form">
+            <h2>Crie sua conta</h2>
             <label for="email">E-mail:</label>
-            <input type="text" name="email" id="email" placeholder="Digite seu e-mail" required>
+            <input type="email" name="email" id="email" placeholder="Digite seu e-mail" required>
             <label for="password">Senha:</label>
             <input type="password" name="password" id="password" placeholder="Digite sua senha" required>
-            <button type="submit">Entrar</button>
-            <p class="register-link">Não tem uma conta? <a href="{{ url_for('register') }}">Registre-se aqui</a>.</p>
+            <label for="confirm_password">Confirme a senha:</label>
+            <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirme sua senha" required>
+            <button type="submit">Registrar</button>
+            <p class="login-link">Já tem uma conta? <a href="{{ url_for('login') }}">Faça login aqui</a>.</p>
         </form>
     </div>
 </body>

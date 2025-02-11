@@ -239,6 +239,108 @@ h1 {
     width: 100%;
     padding: 10px;
 }
+/* Centralizar o container */
+.container {
+    width: 100%;
+    max-width: 400px; /* Largura máxima do container */
+    margin: 40px auto; /* Centraliza o container horizontalmente */
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 5px;
+}
+
+/* Estilo para centralizar o formulário */
+.center-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza os itens no eixo horizontal */
+}
+
+.center-form h2 {
+    text-align: center;
+}
+
+/* Garantir que os elementos ocupem toda a largura disponível */
+.center-form label,
+.center-form input,
+.center-form button,
+.center-form p {
+    width: 100%;
+}
+
+/* Espaçamento entre os labels e inputs */
+.center-form label {
+    margin-top: 15px;
+}
+
+/* Estilo dos inputs */
+.center-form input[type="text"],
+.center-form input[type="password"],
+.center-form input[type="email"] {
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+
+/* Estilo do botão */
+.center-form button {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+    width: 100%;
+}
+
+.center-form button:hover {
+    background-color: #218838;
+}
+
+/* Estilos para links */
+.register-link,
+.login-link {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.register-link a,
+.login-link a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.register-link a:hover,
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+/* Estilo para mensagens flash */
+.flashes {
+    list-style-type: none;
+    padding: 0;
+    margin: 20px auto;
+    max-width: 400px; /* Alinha com a largura do container */
+}
+
+.flashes li {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+}
+
+.flashes li.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.flashes li.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
 
 /* Responsividade */
 @media (max-width: 500px) {
